@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 290 5% 10%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 290 5% 10%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 290 5% 10%;
+    
+    --primary: 290 28% 57%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 290 10% 96%;
+    --secondary-foreground: 290 28% 57%;
+    
+    --muted: 290 10% 96%;
+    --muted-foreground: 290 5% 40%;
+    
+    --accent: 290 10% 96%;
+    --accent-foreground: 290 28% 57%;
+    
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --border: 290 10% 90%;
+    --input: 290 10% 90%;
+    --ring: 290 28% 57%;
+    
+    --radius: 1rem;
+  }
+
+  .dark {
+    --background: 280 6% 10%;
+    --foreground: 0 0% 98%;
+    
+    --card: 280 6% 13%;
+    --card-foreground: 0 0% 98%;
+    
+    --popover: 280 6% 13%;
+    --popover-foreground: 0 0% 98%;
+    
+    --primary: 290 28% 57%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 280 6% 18%;
+    --secondary-foreground: 0 0% 98%;
+    
+    --muted: 280 6% 18%;
+    --muted-foreground: 280 5% 65%;
+    
+    --accent: 280 6% 18%;
+    --accent-foreground: 0 0% 98%;
+    
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --border: 280 6% 20%;
+    --input: 280 6% 20%;
+    --ring: 290 28% 57%;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased transition-colors duration-300 selection:bg-primary-purple/30;
+  }
+
+  h1, h2, h3, h4, h5, h6, .font-display {
+    font-family: 'BPG WEB 002 Caps', serif;
+  }
+
+  body, p, span, div, input, textarea, select, button {
+    font-family: 'BPG Glaho Bold', sans-serif;
+  }
+
+  /* Smooth Scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer utilities {
+  .text-primary-purple {
+    color: #a572af;
+  }
+  .bg-primary-purple {
+    background-color: #a572af;
+  }
+  .border-primary-purple {
+    border-color: #a572af;
+  }
+  
+  .animate-spin-slow {
+    animation: spin 8s linear infinite;
+  }
+  
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}

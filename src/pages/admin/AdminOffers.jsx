@@ -8,8 +8,12 @@ const AdminOffers = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
+  const fetchOffers = () => {
     api('/api/content/offers').then(data => { setOffers(data); setLoading(false); }).catch(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchOffers();
   }, []);
 
   const handleChange = (id, key, value) => {
@@ -20,6 +24,7 @@ const AdminOffers = () => {
     setSaving(true);
     try {
       await api(`/api/admin/offers/${offer.id}`, { method: 'PUT', body: offer });
+      fetchOffers();
     } catch (err) { alert(err.message); }
     setSaving(false);
   };

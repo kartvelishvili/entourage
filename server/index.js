@@ -19,6 +19,13 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
+// Prevent caching on API responses
+app.use('/api', (req, res, next) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.set('Pragma', 'no-cache');
+  next();
+});
+
 // S3 SigV4 upload helper
 function signS3(method, s3Path, contentType, bodyHash) {
   const endpoint = new URL(process.env.S3_ENDPOINT);

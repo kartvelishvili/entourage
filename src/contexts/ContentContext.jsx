@@ -20,17 +20,18 @@ export const ContentProvider = ({ children }) => {
   useEffect(() => {
     const fetchAll = async () => {
       try {
+        const base = import.meta.env.VITE_API_URL || '';
         const [settings, heroSlides, procedures, team, faqs, results, reels, offers, mentors, navItems] = await Promise.all([
-          fetch('/api/content/settings').then(r => r.json()).catch(() => ({})),
-          fetch('/api/content/hero-slides').then(r => r.json()).catch(() => []),
-          fetch('/api/content/procedures').then(r => r.json()).catch(() => []),
-          fetch('/api/content/team').then(r => r.json()).catch(() => []),
-          fetch('/api/content/faqs').then(r => r.json()).catch(() => []),
-          fetch('/api/content/results').then(r => r.json()).catch(() => []),
-          fetch('/api/content/reels').then(r => r.json()).catch(() => []),
-          fetch('/api/content/offers').then(r => r.json()).catch(() => []),
-          fetch('/api/content/mentors').then(r => r.json()).catch(() => []),
-          fetch('/api/content/nav-items').then(r => r.json()).catch(() => []),
+          fetch(`${base}/api/content/settings`).then(r => r.json()).catch(() => ({})),
+          fetch(`${base}/api/content/hero-slides`).then(r => r.json()).catch(() => []),
+          fetch(`${base}/api/content/procedures`).then(r => r.json()).catch(() => []),
+          fetch(`${base}/api/content/team`).then(r => r.json()).catch(() => []),
+          fetch(`${base}/api/content/faqs`).then(r => r.json()).catch(() => []),
+          fetch(`${base}/api/content/results`).then(r => r.json()).catch(() => []),
+          fetch(`${base}/api/content/reels`).then(r => r.json()).catch(() => []),
+          fetch(`${base}/api/content/offers`).then(r => r.json()).catch(() => []),
+          fetch(`${base}/api/content/mentors`).then(r => r.json()).catch(() => []),
+          fetch(`${base}/api/content/nav-items`).then(r => r.json()).catch(() => []),
         ]);
         setContent({ settings, heroSlides, procedures, team, faqs, results, reels, offers, mentors, navItems, loaded: true });
       } catch {

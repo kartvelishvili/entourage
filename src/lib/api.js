@@ -1,3 +1,4 @@
+const API_BASE = import.meta.env.VITE_API_URL || '';
 const getToken = () => localStorage.getItem('admin_token');
 
 const api = async (url, options = {}) => {
@@ -13,7 +14,7 @@ const api = async (url, options = {}) => {
   if (config.body && typeof config.body !== 'string') {
     config.body = JSON.stringify(config.body);
   }
-  const res = await fetch(url, config);
+  const res = await fetch(`${API_BASE}${url}`, config);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'შეცდომა');
   return data;
@@ -23,7 +24,7 @@ const uploadFile = async (file) => {
   const token = getToken();
   const formData = new FormData();
   formData.append('file', file);
-  const res = await fetch('/api/admin/upload', {
+  const res = await fetch(`${API_BASE}/api/admin/upload`, {
     method: 'POST',
     headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
     body: formData,
@@ -34,4 +35,4 @@ const uploadFile = async (file) => {
 };
 
 export default api;
-export { getToken, uploadFile };
+export { API_BASE, getToken, uploadFile };

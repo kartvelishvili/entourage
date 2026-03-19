@@ -12,6 +12,7 @@ import pool from './db.js';
 import { authMiddleware, JWT_SECRET } from './middleware/auth.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.join(__dirname, '.env') });
 dotenv.config({ path: path.join(__dirname, '..', '.env') });
 
 const app = express();

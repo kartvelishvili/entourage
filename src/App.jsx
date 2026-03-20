@@ -13,6 +13,7 @@ import ContactPage from '@/pages/ContactPage';
 import BookingPage from '@/pages/BookingPage';
 import StickyBookingButton from '@/components/StickyBookingButton';
 import { Toaster } from '@/components/ui/toaster';
+import ScrollToTop from '@/components/ScrollToTop';
 import { ContentProvider } from '@/contexts/ContentContext';
 import { AuthProvider } from '@/contexts/AuthContext';
 import AdminLogin from '@/pages/admin/AdminLogin';
@@ -60,6 +61,7 @@ function App() {
     <AuthProvider>
       <ContentProvider>
         <Router>
+          <ScrollToTop />
           <Helmet>
             <title>Entourage - ბაია კონდრატიევას ესთეტიკური ცენტრი</title>
             <meta name="description" content="პრემიუმ ესთეტიკური ცენტრი თბილისში - ბოტოქსი, ფილერები, ბიორევიტალიზაცია და სხვა თანამედროვე პროცედურები" />

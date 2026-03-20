@@ -121,6 +121,10 @@ async function migrate() {
     await client.query(`INSERT INTO site_settings (key, value) VALUES ('footer.tiktok_url', '') ON CONFLICT (key) DO NOTHING`);
     await client.query(`INSERT INTO site_settings (key, value) VALUES ('footer.creator_logo_height', '32') ON CONFLICT (key) DO NOTHING`);
 
+    // Sticky button settings
+    await client.query(`INSERT INTO site_settings (key, value) VALUES ('sticky_button.enabled', 'true') ON CONFLICT (key) DO NOTHING`);
+    await client.query(`INSERT INTO site_settings (key, value) VALUES ('sticky_button.link', '/contact') ON CONFLICT (key) DO NOTHING`);
+
     // ── Offers ──
     await client.query(`
       CREATE TABLE IF NOT EXISTS offers (

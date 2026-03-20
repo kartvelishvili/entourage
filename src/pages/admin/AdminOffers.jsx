@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '@/lib/api';
-import { Save, Loader2, Plus, Pencil, Trash2, X } from 'lucide-react';
+import { Save, Loader2, Plus, Pencil, Trash2, X, Copy, Eye, EyeOff } from 'lucide-react';
 import ImageUpload from '@/components/admin/ImageUpload';
 
 const emptyOffer = { badge_text: '', title: '', subtitle: '', description: '', old_price: '', new_price: '', image: '', is_active: true };
@@ -37,6 +37,16 @@ const AdminOffers = () => {
     fetchOffers();
   };
 
+  const handleDuplicate = (offer) => {
+    const { id, ...rest } = offer;
+    setEditing({ ...rest, title: `${rest.title} (ასლი)`, is_active: false });
+  };
+
+  const handleToggleActive = async (offer) => {
+    await api(`/api/admin/offers/${offer.id}`, { method: 'PUT', body: { ...offer, is_active: !offer.is_active } });
+    fetchOffers();
+  };
+
   if (loading) return <div className="flex items-center justify-center h-64"><div className="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" /></div>;
 
   return (
@@ -69,9 +79,13 @@ const AdminOffers = () => {
                   </p>
                 )}
               </div>
-              <div className="flex gap-2 shrink-0">
-                <button onClick={() => setEditing({ ...offer })} className="text-gray-500 hover:text-purple-400 p-2"><Pencil size={16} /></button>
-                <button onClick={() => handleDelete(offer.id)} className="text-gray-500 hover:text-red-400 p-2"><Trash2 size={16} /></button>
+              <div className="flex gap-1 shrink-0">
+                <button onClick={() => handleToggleActive(offer)} className="text-gray-500 hover:text-yellow-400 p-2" title={offer.is_active ? 'დამალვა' : 'გააქტიურება'}>
+                  {offer.is_active ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+                <button onClick={() => handleDuplicate(offer)} className="text-gray-500 hover:text-blue-400 p-2" title="დუბლირება"><Copy size={16} /></button>
+                <button onClick={() => setEditing({ ...offer })} className="text-gray-500 hover:text-purple-400 p-2" title="რედაქტირება"><Pencil size={16} /></button>
+                <button onClick={() => handleDelete(offer.id)} className="text-gray-500 hover:text-red-400 p-2" title="წაშლა"><Trash2 size={16} /></button>
               </div>
             </div>
           </div>

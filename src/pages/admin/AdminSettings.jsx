@@ -5,6 +5,13 @@ import ImageUpload from '@/components/admin/ImageUpload';
 
 const settingsGroups = [
   {
+    title: 'მცურავი ღილაკი',
+    keys: [
+      { key: 'sticky_button.enabled', label: 'ჩართული (true / false)' },
+      { key: 'sticky_button.link', label: 'ლინკი (მაგ: /contact)' },
+    ],
+  },
+  {
     title: 'ზოგადი',
     keys: [
       { key: 'site.title', label: 'საიტის სახელი' },

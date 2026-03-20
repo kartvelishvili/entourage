@@ -12,7 +12,7 @@ const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const location = useLocation();
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
-  const { navItems: dbNavItems } = useContent();
+  const { navItems: dbNavItems, s } = useContent();
 
   const navLinks = (dbNavItems && dbNavItems.length > 0)
     ? dbNavItems.map(item => ({
@@ -57,10 +57,16 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
-             <div className="w-10 h-10 bg-primary-purple rounded-xl flex items-center justify-center text-white font-serif font-bold text-2xl group-hover:rotate-12 transition-transform shadow-lg shadow-primary-purple/20">E</div>
-            <span className="text-2xl font-serif font-bold text-foreground tracking-wide group-hover:text-primary-purple transition-colors">
-              Entourage
-            </span>
+            {s('site.logo') ? (
+              <img src={s('site.logo')} alt={s('site.title', 'Entourage')} className="h-10 w-auto object-contain" />
+            ) : (
+              <>
+                <div className="w-10 h-10 bg-primary-purple rounded-xl flex items-center justify-center text-white font-serif font-bold text-2xl group-hover:rotate-12 transition-transform shadow-lg shadow-primary-purple/20">E</div>
+                <span className="text-2xl font-serif font-bold text-foreground tracking-wide group-hover:text-primary-purple transition-colors">
+                  Entourage
+                </span>
+              </>
+            )}
           </Link>
 
           {/* Desktop Navigation */}

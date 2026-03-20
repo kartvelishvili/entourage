@@ -11,6 +11,15 @@ const settingsGroups = [
       { key: 'site.tagline', label: 'ტეგლაინი' },
       { key: 'site.meta_title', label: 'Meta Title' },
       { key: 'site.meta_description', label: 'Meta Description', type: 'textarea' },
+      { key: 'site.logo', label: 'საიტის ლოგო', type: 'image' },
+    ],
+  },
+  {
+    title: 'ფუტერი — შემქმნელი',
+    keys: [
+      { key: 'footer.creator_logo', label: 'შემქმნელის ლოგო', type: 'image' },
+      { key: 'footer.creator_url', label: 'შემქმნელის საიტის ლინკი' },
+      { key: 'footer.creator_name', label: 'შემქმნელის სახელი' },
     ],
   },
   {

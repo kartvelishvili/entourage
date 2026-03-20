@@ -1,19 +1,22 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Play, X } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { useContent } from '@/contexts/ContentContext';
 
+const getFbEmbedUrl = (url) => {
+  if (!url) return '';
+  return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false&t=0`;
+};
+
 const ReelsSection = () => {
-  const [activeVideo, setActiveVideo] = useState(null);
   const { reels: ctxReels, s } = useContent();
 
-  const reels = ctxReels.length > 0 ? ctxReels.map(r => ({
-    id: r.id,
-    title: r.title,
-    description: r.description,
-    thumbnail: r.thumbnail,
-    video: r.video_url,
-  })) : [];
+  useEffect(() => {
+    if (window.FB) {
+      window.FB.XFBML.parse();
+    }
+  }, [ctxReels]);
+
+  if (!ctxReels || ctxReels.length === 0) return null;
 
   return (
     <section className="py-24 bg-background relative z-10">
@@ -21,83 +24,46 @@ const ReelsSection = () => {
         <div className="flex flex-col md:flex-row justify-between items-end mb-12">
           <div className="mb-6 md:mb-0">
             <h2 className="text-4xl font-bold text-foreground mb-4">
-              ვიდეო <span className="text-primary-purple">{s('reels.title_highlight', 'გალერეა')}</span>
+              {s('reels.title', 'ვიდეო')} <span className="text-primary-purple">{s('reels.title_highlight', 'გალერეა')}</span>
             </h2>
             <p className="text-lg text-muted-foreground">
-              ნახეთ პროცედურების მიმდინარეობა და შედეგები
+              {s('reels.subtitle', 'ნახეთ პროცედურების მიმდინარეობა და შედეგები')}
             </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {reels.map((reel, index) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {ctxReels.map((reel, index) => (
             <motion.div
               key={reel.id}
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              whileHover={{ y: -10 }}
-              className="group relative aspect-[9/16] rounded-3xl overflow-hidden shadow-xl cursor-pointer bg-black"
-              onClick={() => setActiveVideo(reel.video)}
+              className="rounded-3xl overflow-hidden shadow-xl bg-card border border-border"
             >
-              <img
-                src={reel.thumbnail}
-                alt={reel.title}
-                className="w-full h-full object-cover opacity-80 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700"
-              />
-              
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
-                  <Play size={32} fill="currentColor" className="ml-1" />
+              <div className="aspect-[9/16]">
+                <iframe
+                  src={getFbEmbedUrl(reel.video_url)}
+                  className="w-full h-full"
+                  style={{ border: 'none', overflow: 'hidden' }}
+                  scrolling="no"
+                  frameBorder="0"
+                  allowFullScreen
+                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                  title={reel.title || 'Facebook Video'}
+                />
+              </div>
+              {(reel.title || reel.description) && (
+                <div className="p-4">
+                  {reel.title && <h3 className="text-foreground font-bold text-sm">{reel.title}</h3>}
+                  {reel.description && <p className="text-muted-foreground text-xs mt-1">{reel.description}</p>}
                 </div>
-              </div>
-
-              <div className="absolute bottom-0 inset-x-0 p-6 bg-gradient-to-t from-black via-black/60 to-transparent pt-20">
-                <h3 className="text-white font-bold text-lg mb-1">{reel.title}</h3>
-                <p className="text-white/80 text-sm">{reel.description}</p>
-              </div>
+              )}
             </motion.div>
           ))}
         </div>
       </div>
-
-      {/* Video Modal */}
-      <AnimatePresence>
-        {activeVideo && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4"
-            onClick={() => setActiveVideo(null)}
-          >
-            <motion.div
-              initial={{ scale: 0.9 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.9 }}
-              className="relative w-full max-w-4xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                onClick={() => setActiveVideo(null)}
-                className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
-              >
-                <X size={24} />
-              </button>
-              <iframe
-                src={activeVideo}
-                className="w-full h-full"
-                frameBorder="0"
-                width="100%"
-                height="100%"
-                allowFullScreen
-                title="Video Player"
-              ></iframe>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   );
 };

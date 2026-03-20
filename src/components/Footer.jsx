@@ -13,9 +13,13 @@ const Footer = () => {
           {/* Brand */}
           <div className="col-span-1 md:col-span-1">
             <Link to="/" className="inline-block mb-6">
+            {s('site.logo') ? (
+              <img src={s('site.logo')} alt={s('site.name', 'Entourage')} className="h-10 w-auto object-contain" />
+            ) : (
               <span className="text-3xl font-serif font-bold text-primary-purple tracking-wide">
                 {s('site.name', 'Entourage')}
               </span>
+            )}
             </Link>
             <p className="text-muted-foreground mb-6">
               {s('site.tagline', 'პრემიუმ ესთეტიკური ცენტრი, სადაც სილამაზე ხვდება პროფესიონალიზმს.')}
@@ -84,10 +88,21 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-border pt-8 text-center">
+        <div className="border-t border-border pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-muted-foreground">
             © {new Date().getFullYear()} Entourage Aesthetic Center. ყველა უფლება დაცულია.
           </p>
+          {s('footer.creator_logo') && (
+            <a
+              href={s('footer.creator_url', '#')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity"
+              title={s('footer.creator_name', 'შემქმნელი')}
+            >
+              <img src={s('footer.creator_logo')} alt={s('footer.creator_name', 'შემქმნელი')} className="h-8 w-auto object-contain" />
+            </a>
+          )}
         </div>
       </div>
     </footer>

@@ -102,10 +102,12 @@ async function migrate() {
         title VARCHAR(200) NOT NULL,
         description TEXT DEFAULT '',
         thumbnail VARCHAR(500) DEFAULT '',
-        video_url VARCHAR(500) DEFAULT '',
+        video_url TEXT DEFAULT '',
         sort_order INT DEFAULT 0
       )
     `);
+    // Expand video_url to TEXT for existing databases
+    await client.query(`ALTER TABLE reels ALTER COLUMN video_url TYPE TEXT`);
 
     // ── Offers ──
     await client.query(`

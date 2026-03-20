@@ -6,6 +6,8 @@ import { useToast } from '@/components/ui/use-toast';
 import PageHeader from '@/components/PageHeader';
 import { useContent } from '@/contexts/ContentContext';
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 const CoursesPage = () => {
   const { toast } = useToast();
   const { mentors: ctxMentors, s } = useContent();
@@ -27,7 +29,7 @@ const CoursesPage = () => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-        const res = await fetch('/api/course-register', {
+        const res = await fetch(`${API_BASE}/api/course-register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData),

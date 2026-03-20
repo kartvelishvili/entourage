@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '@/lib/api';
-import { Plus, Pencil, Trash2, X, Save } from 'lucide-react';
+import { Plus, Pencil, Trash2, X, Save, ChevronUp, ChevronDown } from 'lucide-react';
 import ImageUpload from '@/components/admin/ImageUpload';
 
 const emptyProc = { slug: '', category: 'injection', name: '', description: '', image: '', is_popular: false, popular_name: '', popular_description: '', popular_image: '', detail_description: '', benefits: [], steps: [], video_url: '', duration: '', price_from: '' };
@@ -46,6 +46,18 @@ const AdminProcedures = () => {
     setStepInput('');
   };
 
+  const moveItem = async (index, direction) => {
+    const newIndex = index + direction;
+    if (newIndex < 0 || newIndex >= items.length) return;
+    const a = items[index];
+    const b = items[newIndex];
+    await api('/api/admin/procedures/reorder', {
+      method: 'PUT',
+      body: { items: [{ id: a.id, sort_order: b.sort_order }, { id: b.id, sort_order: a.sort_order }] }
+    });
+    fetchItems();
+  };
+
   if (loading) return <div className="flex items-center justify-center h-64"><div className="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" /></div>;
 
   return (
@@ -65,6 +77,7 @@ const AdminProcedures = () => {
           <table className="w-full">
             <thead>
               <tr className="text-xs text-gray-500 uppercase border-b border-gray-800">
+                <th className="text-center px-3 py-3 w-12">#</th>
                 <th className="text-left px-6 py-3">სურათი</th>
                 <th className="text-left px-6 py-3">სახელი</th>
                 <th className="text-left px-6 py-3">კატეგორია</th>
@@ -74,8 +87,15 @@ const AdminProcedures = () => {
               </tr>
             </thead>
             <tbody>
-              {items.map(item => (
+              {items.map((item, index) => (
                 <tr key={item.id} className="border-b border-gray-800/50 hover:bg-gray-800/30">
+                  <td className="px-3 py-3">
+                    <div className="flex flex-col items-center gap-0.5">
+                      <button onClick={() => moveItem(index, -1)} disabled={index === 0} className="text-gray-500 hover:text-purple-400 disabled:opacity-20 p-0.5"><ChevronUp size={14} /></button>
+                      <span className="text-gray-600 text-xs">{index + 1}</span>
+                      <button onClick={() => moveItem(index, 1)} disabled={index === items.length - 1} className="text-gray-500 hover:text-purple-400 disabled:opacity-20 p-0.5"><ChevronDown size={14} /></button>
+                    </div>
+                  </td>
                   <td className="px-6 py-3"><div className="w-16 h-12 rounded-lg overflow-hidden bg-gray-800">{item.image && <img src={item.image} alt="" className="w-full h-full object-cover" />}</div></td>
                   <td className="px-6 py-3 text-white text-sm font-medium">{item.name}</td>
                   <td className="px-6 py-3 text-gray-400 text-sm">{item.category}</td>

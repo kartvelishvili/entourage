@@ -3,6 +3,8 @@ import { X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from '@/components/ui/use-toast';
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 const BookingModal = ({ isOpen, onClose }) => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -48,16 +50,22 @@ const BookingModal = ({ isOpen, onClose }) => {
 
     setIsSubmitting(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      // Store in localStorage
-      const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
-      bookings.push({
-        ...formData,
-        id: Date.now(),
-        createdAt: new Date().toISOString(),
+    try {
+      const res = await fetch(`${API_BASE}/api/bookings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          procedure_name: formData.procedure,
+          date: formData.date,
+          time: formData.time,
+          comment: formData.message,
+          source: 'modal',
+        }),
       });
-      localStorage.setItem('bookings', JSON.stringify(bookings));
+      if (!res.ok) throw new Error();
 
       toast({
         title: 'წარმატება! ✨',
@@ -75,7 +83,14 @@ const BookingModal = ({ isOpen, onClose }) => {
       });
       setIsSubmitting(false);
       onClose();
-    }, 1500);
+    } catch {
+      toast({
+        title: 'შეცდომა',
+        description: 'გთხოვთ სცადოთ თავიდან',
+        variant: 'destructive',
+      });
+      setIsSubmitting(false);
+    }
   };
 
   if (!isOpen) return null;

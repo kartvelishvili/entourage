@@ -279,6 +279,14 @@ app.delete('/api/admin/procedures/:id', authMiddleware, async (req, res) => {
   res.json({ success: true });
 });
 
+app.put('/api/admin/procedures/reorder', authMiddleware, async (req, res) => {
+  const { items } = req.body; // [{id, sort_order}]
+  for (const item of items) {
+    await pool.query('UPDATE procedures SET sort_order = $1 WHERE id = $2', [item.sort_order, item.id]);
+  }
+  res.json({ success: true });
+});
+
 // ══════════════════════════════════════
 // TEAM MEMBERS
 // ══════════════════════════════════════
@@ -390,6 +398,14 @@ app.put('/api/admin/reels/:id', authMiddleware, async (req, res) => {
 
 app.delete('/api/admin/reels/:id', authMiddleware, async (req, res) => {
   await pool.query('DELETE FROM reels WHERE id = $1', [req.params.id]);
+  res.json({ success: true });
+});
+
+app.put('/api/admin/reels/reorder', authMiddleware, async (req, res) => {
+  const { items } = req.body; // [{id, sort_order}]
+  for (const item of items) {
+    await pool.query('UPDATE reels SET sort_order = $1 WHERE id = $2', [item.sort_order, item.id]);
+  }
   res.json({ success: true });
 });
 

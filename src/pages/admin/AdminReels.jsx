@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import api from '@/lib/api';
-import { Plus, Pencil, Trash2, X, Save, Code, Play } from 'lucide-react';
+import { Plus, Pencil, Trash2, X, Save, Code, Play, ChevronUp, ChevronDown, GripVertical } from 'lucide-react';
 
 // Sanitize: extract full <iframe> tag only (security)
 const sanitizeIframe = (input) => {
   if (!input) return '';
   const trimmed = input.trim();
-  // Extract the full <iframe>...</iframe> tag
   const match = trimmed.match(/<iframe[^>]*src=["'][^"']+["'][^>]*><\/iframe>/i);
   return match ? match[0] : '';
 };
 
-// Check if input has a valid iframe
 const hasIframe = (input) => {
   if (!input) return false;
   return /<iframe[^>]*src=["'][^"']+["'][^>]*>/i.test(input.trim());
@@ -33,7 +31,6 @@ const AdminReels = () => {
 
   const handleSave = async () => {
     try {
-      // Save the full sanitized iframe HTML
       const iframeHtml = sanitizeIframe(embedInput);
       if (!iframeHtml) { alert('გთხოვთ ჩასვათ სწორი <iframe> ემბედ კოდი'); return; }
       const dataToSave = { ...editing, video_url: iframeHtml };
@@ -54,6 +51,18 @@ const AdminReels = () => {
     fetchItems();
   };
 
+  const moveItem = async (index, direction) => {
+    const newIndex = index + direction;
+    if (newIndex < 0 || newIndex >= items.length) return;
+    const a = items[index];
+    const b = items[newIndex];
+    await api('/api/admin/reels/reorder', {
+      method: 'PUT',
+      body: { items: [{ id: a.id, sort_order: b.sort_order }, { id: b.id, sort_order: a.sort_order }] }
+    });
+    fetchItems();
+  };
+
   const openEdit = (item) => {
     setEditing({ ...item });
     setEmbedInput(item?.video_url || '');
@@ -71,7 +80,7 @@ const AdminReels = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-white mb-1">ვიდეოები / Reels</h1>
-          <p className="text-gray-500">{items.length} ვიდეო</p>
+          <p className="text-gray-500">{items.length} ვიდეო · მთავარ გვერდზე ჩანს ყველა, გადაალაგეთ ისრებით</p>
         </div>
         <button onClick={openNew} className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2.5 rounded-xl font-medium flex items-center gap-2">
           <Plus size={18} /> დამატება
@@ -88,23 +97,32 @@ const AdminReels = () => {
         </ol>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {items.map(item => (
-          <div key={item.id} className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
-            <div className="aspect-[9/12] bg-gray-800 [&_iframe]:!w-full [&_iframe]:!h-full [&_iframe]:!border-none">
+      <div className="space-y-3">
+        {items.map((item, index) => (
+          <div key={item.id} className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden flex">
+            {/* Reorder controls */}
+            <div className="flex flex-col items-center justify-center px-3 border-r border-gray-800 gap-1 bg-gray-800/30">
+              <button onClick={() => moveItem(index, -1)} disabled={index === 0} className="text-gray-500 hover:text-purple-400 disabled:opacity-20 disabled:hover:text-gray-500 p-1"><ChevronUp size={18} /></button>
+              <span className="text-gray-600 text-xs font-mono">{index + 1}</span>
+              <button onClick={() => moveItem(index, 1)} disabled={index === items.length - 1} className="text-gray-500 hover:text-purple-400 disabled:opacity-20 disabled:hover:text-gray-500 p-1"><ChevronDown size={18} /></button>
+            </div>
+            {/* Thumbnail */}
+            <div className="w-24 h-32 bg-gray-800 shrink-0 [&_iframe]:!w-full [&_iframe]:!h-full [&_iframe]:!border-none [&_iframe]:pointer-events-none">
               {item.video_url ? (
-                <div dangerouslySetInnerHTML={{ __html: item.video_url }} />
+                <div className="w-full h-full" dangerouslySetInnerHTML={{ __html: item.video_url }} />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-gray-600">
-                  <Play size={40} />
-                </div>
+                <div className="w-full h-full flex items-center justify-center text-gray-600"><Play size={20} /></div>
               )}
             </div>
-            <div className="p-4">
-              <h3 className="text-white font-medium text-sm">{item.title || 'ვიდეო'}</h3>
-              <div className="flex gap-2 mt-3">
-                <button onClick={() => openEdit(item)} className="text-gray-500 hover:text-purple-400 p-1"><Pencil size={16} /></button>
-                <button onClick={() => handleDelete(item.id)} className="text-gray-500 hover:text-red-400 p-1"><Trash2 size={16} /></button>
+            {/* Info */}
+            <div className="flex-1 p-4 flex items-center justify-between">
+              <div>
+                <h3 className="text-white font-medium text-sm">{item.title || 'ვიდეო'}</h3>
+                {item.description && <p className="text-gray-500 text-xs mt-1">{item.description}</p>}
+              </div>
+              <div className="flex gap-2 shrink-0">
+                <button onClick={() => openEdit(item)} className="text-gray-500 hover:text-purple-400 p-2"><Pencil size={16} /></button>
+                <button onClick={() => handleDelete(item.id)} className="text-gray-500 hover:text-red-400 p-2"><Trash2 size={16} /></button>
               </div>
             </div>
           </div>

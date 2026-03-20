@@ -7,6 +7,8 @@ import { useLocation, Link } from 'react-router-dom';
 import PageHeader from '@/components/PageHeader';
 import { useContent } from '@/contexts/ContentContext';
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 const BookingPage = () => {
   const { toast } = useToast();
   const location = useLocation();
@@ -55,7 +57,7 @@ const BookingPage = () => {
     setIsSubmitting(true);
     
     try {
-        const res = await fetch('/api/bookings', {
+        const res = await fetch(`${API_BASE}/api/bookings`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData),

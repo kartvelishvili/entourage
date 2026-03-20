@@ -12,9 +12,12 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           {/* Brand */}
           <div className="col-span-1 md:col-span-1">
-            <Link to="/" className="inline-block mb-6">
+            <Link to="/" className="inline-block mb-6 group">
             {s('site.logo') ? (
-              <img src={s('site.logo')} alt={s('site.name', 'Entourage')} className="h-10 w-auto object-contain" />
+              <div className="relative">
+                <div className="absolute -inset-2 bg-primary-purple/15 rounded-2xl blur-lg opacity-60" />
+                <img src={s('site.logo')} alt={s('site.name', 'Entourage')} className="h-12 w-auto object-contain relative z-10 drop-shadow-[0_0_8px_rgba(139,92,246,0.25)]" />
+              </div>
             ) : (
               <span className="text-3xl font-serif font-bold text-primary-purple tracking-wide">
                 {s('site.name', 'Entourage')}

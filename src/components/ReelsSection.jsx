@@ -1,20 +1,42 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useContent } from '@/contexts/ContentContext';
 
-const getFbEmbedUrl = (url) => {
-  if (!url) return '';
-  return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false&t=0`;
+const FacebookVideo = ({ url, title }) => {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const tryParse = () => {
+      if (window.FB && containerRef.current) {
+        window.FB.XFBML.parse(containerRef.current);
+      }
+    };
+    // FB SDK might load after component mounts
+    tryParse();
+    const timer = setTimeout(tryParse, 1500);
+    const timer2 = setTimeout(tryParse, 4000);
+    return () => { clearTimeout(timer); clearTimeout(timer2); };
+  }, [url]);
+
+  // Normalize URL — ensure trailing slash for reel/video URLs
+  const normalizedUrl = url?.replace(/\/?$/, '/');
+
+  return (
+    <div ref={containerRef} className="w-full h-full flex items-center justify-center bg-black">
+      <div
+        className="fb-video"
+        data-href={normalizedUrl}
+        data-width="auto"
+        data-show-text="false"
+        data-allowfullscreen="true"
+        data-autoplay="false"
+      />
+    </div>
+  );
 };
 
 const ReelsSection = () => {
   const { reels: ctxReels, s } = useContent();
-
-  useEffect(() => {
-    if (window.FB) {
-      window.FB.XFBML.parse();
-    }
-  }, [ctxReels]);
 
   if (!ctxReels || ctxReels.length === 0) return null;
 
@@ -42,17 +64,8 @@ const ReelsSection = () => {
               transition={{ delay: index * 0.1 }}
               className="rounded-3xl overflow-hidden shadow-xl bg-card border border-border"
             >
-              <div className="aspect-[9/16]">
-                <iframe
-                  src={getFbEmbedUrl(reel.video_url)}
-                  className="w-full h-full"
-                  style={{ border: 'none', overflow: 'hidden' }}
-                  scrolling="no"
-                  frameBorder="0"
-                  allowFullScreen
-                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                  title={reel.title || 'Facebook Video'}
-                />
+              <div className="aspect-[9/16] overflow-hidden">
+                <FacebookVideo url={reel.video_url} title={reel.title} />
               </div>
               {(reel.title || reel.description) && (
                 <div className="p-4">

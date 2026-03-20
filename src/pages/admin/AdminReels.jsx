@@ -35,7 +35,8 @@ const AdminReels = () => {
 
   const getFbEmbedUrl = (url) => {
     if (!url) return '';
-    return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false&t=0`;
+    const normalized = url.replace(/\/?$/, '/');
+    return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(normalized)}&width=267&height=476&show_text=false&t=0`;
   };
 
   if (loading) return <div className="flex items-center justify-center h-64"><div className="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" /></div>;

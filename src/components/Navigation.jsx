@@ -56,9 +56,16 @@ const Navigation = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
+          <Link to="/" className="flex items-center gap-2 group relative">
             {s('site.logo') ? (
-              <img src={s('site.logo')} alt={s('site.title', 'Entourage')} className="h-10 w-auto object-contain" />
+              <div className="relative">
+                <div className="absolute -inset-2 bg-primary-purple/20 rounded-2xl blur-lg group-hover:bg-primary-purple/30 transition-all duration-500 opacity-0 group-hover:opacity-100" />
+                <img
+                  src={s('site.logo')}
+                  alt={s('site.title', 'Entourage')}
+                  className="h-12 w-auto object-contain relative z-10 drop-shadow-[0_0_8px_rgba(139,92,246,0.3)] group-hover:drop-shadow-[0_0_16px_rgba(139,92,246,0.5)] transition-all duration-500 group-hover:scale-105"
+                />
+              </div>
             ) : (
               <>
                 <div className="w-10 h-10 bg-primary-purple rounded-xl flex items-center justify-center text-white font-serif font-bold text-2xl group-hover:rotate-12 transition-transform shadow-lg shadow-primary-purple/20">E</div>

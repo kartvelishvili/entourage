@@ -3,8 +3,13 @@ import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Calendar, Stethoscope, Star, Instagram } from 'lucide-react';
+import { Facebook } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import { useContent } from '@/contexts/ContentContext';
+
+const TikTokIcon = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.88a8.18 8.18 0 004.77 1.52V7a4.84 4.84 0 01-1-.31z"/></svg>
+);
 
 const TeamPage = () => {
   const { team: ctxTeam } = useContent();
@@ -15,6 +20,10 @@ const TeamPage = () => {
     role: m.role,
     spec: m.specialization || m.role,
     image: m.image,
+    instagram: m.instagram || '',
+    facebook: m.facebook || '',
+    linkedin: m.linkedin || '',
+    tiktok: m.tiktok || '',
   })) : [];
 
   return (
@@ -79,9 +88,21 @@ const TeamPage = () => {
                                     <Calendar size={14} />
                                     დაჯავშნა
                                 </Link>
-                                <button className="p-2 rounded-full bg-muted hover:bg-muted/80 text-foreground transition-colors">
-                                  <Instagram size={18} />
-                                </button>
+                                {member.instagram && (
+                                  <a href={member.instagram} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-muted hover:bg-muted/80 text-foreground transition-colors">
+                                    <Instagram size={18} />
+                                  </a>
+                                )}
+                                {member.facebook && (
+                                  <a href={member.facebook} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-muted hover:bg-muted/80 text-foreground transition-colors">
+                                    <Facebook size={18} />
+                                  </a>
+                                )}
+                                {member.tiktok && (
+                                  <a href={member.tiktok} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-muted hover:bg-muted/80 text-foreground transition-colors">
+                                    <TikTokIcon size={18} />
+                                  </a>
+                                )}
                             </div>
                         </div>
                     </motion.div>

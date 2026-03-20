@@ -3,8 +3,12 @@ import { Link } from 'react-router-dom';
 import { Facebook, Instagram, Phone, Mail, MapPin } from 'lucide-react';
 import { useContent } from '@/contexts/ContentContext';
 
+const TikTokIcon = ({ size = 20 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.88a8.18 8.18 0 004.77 1.52V7a4.84 4.84 0 01-1-.31z"/></svg>
+);
+
 const Footer = () => {
-  const { s } = useContent();
+  const { s, procedures } = useContent();
 
   return (
     <footer className="bg-muted dark:bg-card pt-16 pb-8 border-t border-border mt-auto">
@@ -28,12 +32,21 @@ const Footer = () => {
               {s('site.tagline', 'პრემიუმ ესთეტიკური ცენტრი, სადაც სილამაზე ხვდება პროფესიონალიზმს.')}
             </p>
             <div className="flex gap-4">
-              <a href="#" className="p-2 bg-background rounded-full text-primary-purple hover:bg-primary-purple hover:text-white transition-colors shadow-sm">
-                <Facebook size={20} />
-              </a>
-              <a href="#" className="p-2 bg-background rounded-full text-primary-purple hover:bg-primary-purple hover:text-white transition-colors shadow-sm">
-                <Instagram size={20} />
-              </a>
+              {s('footer.facebook_url') && (
+                <a href={s('footer.facebook_url')} target="_blank" rel="noopener noreferrer" className="p-2 bg-background rounded-full text-primary-purple hover:bg-primary-purple hover:text-white transition-colors shadow-sm">
+                  <Facebook size={20} />
+                </a>
+              )}
+              {s('footer.instagram_url') && (
+                <a href={s('footer.instagram_url')} target="_blank" rel="noopener noreferrer" className="p-2 bg-background rounded-full text-primary-purple hover:bg-primary-purple hover:text-white transition-colors shadow-sm">
+                  <Instagram size={20} />
+                </a>
+              )}
+              {s('footer.tiktok_url') && (
+                <a href={s('footer.tiktok_url')} target="_blank" rel="noopener noreferrer" className="p-2 bg-background rounded-full text-primary-purple hover:bg-primary-purple hover:text-white transition-colors shadow-sm">
+                  <TikTokIcon size={20} />
+                </a>
+              )}
             </div>
           </div>
 
@@ -63,11 +76,11 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-bold text-foreground mb-6">პროცედურები</h3>
             <ul className="space-y-3">
-              <li className="text-muted-foreground">ბოტოქსი</li>
-              <li className="text-muted-foreground">დერმალური ფილერი</li>
-              <li className="text-muted-foreground">ბიორევიტალიზაცია</li>
-              <li className="text-muted-foreground">ლაზერული თერაპია</li>
-              <li className="text-muted-foreground">კვამატოლიზი</li>
+              {procedures.slice(0, 5).map(p => (
+                <li key={p.id}>
+                  <Link to={`/procedures/${p.slug}`} className="text-muted-foreground hover:text-primary-purple transition-colors">{p.name}</Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -103,7 +116,7 @@ const Footer = () => {
               className="flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity"
               title={s('footer.creator_name', 'შემქმნელი')}
             >
-              <img src={s('footer.creator_logo')} alt={s('footer.creator_name', 'შემქმნელი')} className="h-8 w-auto object-contain" />
+              <img src={s('footer.creator_logo')} alt={s('footer.creator_name', 'შემქმნელი')} style={{ height: `${s('footer.creator_logo_height', '32')}px` }} className="w-auto object-contain" />
             </a>
           )}
         </div>

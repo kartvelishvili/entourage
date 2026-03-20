@@ -109,6 +109,18 @@ async function migrate() {
     // Expand video_url to TEXT for existing databases
     await client.query(`ALTER TABLE reels ALTER COLUMN video_url TYPE TEXT`);
 
+    // Add social link columns to team_members
+    await client.query(`ALTER TABLE team_members ADD COLUMN IF NOT EXISTS instagram VARCHAR(500) DEFAULT ''`);
+    await client.query(`ALTER TABLE team_members ADD COLUMN IF NOT EXISTS facebook VARCHAR(500) DEFAULT ''`);
+    await client.query(`ALTER TABLE team_members ADD COLUMN IF NOT EXISTS linkedin VARCHAR(500) DEFAULT ''`);
+    await client.query(`ALTER TABLE team_members ADD COLUMN IF NOT EXISTS tiktok VARCHAR(500) DEFAULT ''`);
+
+    // Add footer settings columns
+    await client.query(`INSERT INTO site_settings (key, value) VALUES ('footer.facebook_url', '') ON CONFLICT (key) DO NOTHING`);
+    await client.query(`INSERT INTO site_settings (key, value) VALUES ('footer.instagram_url', '') ON CONFLICT (key) DO NOTHING`);
+    await client.query(`INSERT INTO site_settings (key, value) VALUES ('footer.tiktok_url', '') ON CONFLICT (key) DO NOTHING`);
+    await client.query(`INSERT INTO site_settings (key, value) VALUES ('footer.creator_logo_height', '32') ON CONFLICT (key) DO NOTHING`);
+
     // ── Offers ──
     await client.query(`
       CREATE TABLE IF NOT EXISTS offers (

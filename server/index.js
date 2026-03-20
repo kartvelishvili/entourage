@@ -297,20 +297,20 @@ app.get('/api/content/team', async (req, res) => {
 });
 
 app.post('/api/admin/team', authMiddleware, async (req, res) => {
-  const { slug, name, role, specialization, image } = req.body;
+  const { slug, name, role, specialization, image, instagram, facebook, linkedin, tiktok } = req.body;
   const maxOrder = await pool.query('SELECT COALESCE(MAX(sort_order), -1) + 1 as next FROM team_members');
   const result = await pool.query(
-    'INSERT INTO team_members (slug, name, role, specialization, image, sort_order) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *',
-    [slug, name, role, specialization || '', image || '', maxOrder.rows[0].next]
+    'INSERT INTO team_members (slug, name, role, specialization, image, sort_order, instagram, facebook, linkedin, tiktok) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *',
+    [slug, name, role, specialization || '', image || '', maxOrder.rows[0].next, instagram || '', facebook || '', linkedin || '', tiktok || '']
   );
   res.json(result.rows[0]);
 });
 
 app.put('/api/admin/team/:id', authMiddleware, async (req, res) => {
-  const { slug, name, role, specialization, image, sort_order } = req.body;
+  const { slug, name, role, specialization, image, sort_order, instagram, facebook, linkedin, tiktok } = req.body;
   const result = await pool.query(
-    'UPDATE team_members SET slug=$1, name=$2, role=$3, specialization=$4, image=$5, sort_order=COALESCE($6, sort_order) WHERE id=$7 RETURNING *',
-    [slug, name, role, specialization || '', image || '', sort_order, req.params.id]
+    'UPDATE team_members SET slug=$1, name=$2, role=$3, specialization=$4, image=$5, sort_order=COALESCE($6, sort_order), instagram=$7, facebook=$8, linkedin=$9, tiktok=$10 WHERE id=$11 RETURNING *',
+    [slug, name, role, specialization || '', image || '', sort_order, instagram || '', facebook || '', linkedin || '', tiktok || '', req.params.id]
   );
   res.json(result.rows[0]);
 });
@@ -414,8 +414,17 @@ app.put('/api/admin/reels/reorder', authMiddleware, async (req, res) => {
 // ══════════════════════════════════════
 
 app.get('/api/content/offers', async (req, res) => {
-  const result = await pool.query('SELECT * FROM offers ORDER BY id');
+  const result = await pool.query('SELECT * FROM offers ORDER BY id DESC');
   res.json(result.rows);
+});
+
+app.post('/api/admin/offers', authMiddleware, async (req, res) => {
+  const { badge_text, title, subtitle, description, old_price, new_price, image, is_active } = req.body;
+  const result = await pool.query(
+    'INSERT INTO offers (badge_text, title, subtitle, description, old_price, new_price, image, is_active) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *',
+    [badge_text || '', title || '', subtitle || '', description || '', old_price || '', new_price || '', image || '', is_active !== false]
+  );
+  res.json(result.rows[0]);
 });
 
 app.put('/api/admin/offers/:id', authMiddleware, async (req, res) => {
@@ -425,6 +434,11 @@ app.put('/api/admin/offers/:id', authMiddleware, async (req, res) => {
     [badge_text, title, subtitle, description, old_price, new_price, image, is_active, req.params.id]
   );
   res.json(result.rows[0]);
+});
+
+app.delete('/api/admin/offers/:id', authMiddleware, async (req, res) => {
+  await pool.query('DELETE FROM offers WHERE id = $1', [req.params.id]);
+  res.json({ success: true });
 });
 
 // ══════════════════════════════════════
@@ -598,6 +612,16 @@ app.get('/api/admin/stats', authMiddleware, async (req, res) => {
     procedures: procedures.rows[0],
     team: team.rows[0],
   });
+});
+
+// ══════════════════════════════════════
+// CACHE CLEAR
+// ══════════════════════════════════════
+
+app.post('/api/admin/clear-cache', authMiddleware, async (req, res) => {
+  // Nothing to clear server-side (no in-memory cache), but acknowledge the request
+  // The frontend will refetch all content after this call
+  res.json({ success: true, message: 'Cache cleared' });
 });
 
 // ══════════════════════════════════════

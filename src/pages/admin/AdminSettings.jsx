@@ -15,11 +15,15 @@ const settingsGroups = [
     ],
   },
   {
-    title: 'ფუტერი — შემქმნელი',
+    title: 'ფუტერი — სოციალური ქსელები & შემქმნელი',
     keys: [
+      { key: 'footer.facebook_url', label: 'Facebook URL' },
+      { key: 'footer.instagram_url', label: 'Instagram URL' },
+      { key: 'footer.tiktok_url', label: 'TikTok URL' },
       { key: 'footer.creator_logo', label: 'შემქმნელის ლოგო', type: 'image' },
       { key: 'footer.creator_url', label: 'შემქმნელის საიტის ლინკი' },
       { key: 'footer.creator_name', label: 'შემქმნელის სახელი' },
+      { key: 'footer.creator_logo_height', label: 'ლოგოს სიმაღლე (px)', type: 'number' },
     ],
   },
   {
@@ -177,6 +181,13 @@ const AdminSettings = () => {
                     <ImageUpload
                       value={settings[field.key] || ''}
                       onChange={(url) => handleChange(field.key, url)}
+                    />
+                  ) : field.type === 'number' ? (
+                    <input
+                      type="number"
+                      value={settings[field.key] || ''}
+                      onChange={(e) => handleChange(field.key, e.target.value)}
+                      className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-white text-sm focus:border-purple-500 outline-none transition-colors"
                     />
                   ) : field.type === 'textarea' ? (
                     <textarea

@@ -3,7 +3,7 @@ import api from '@/lib/api';
 import { Plus, Pencil, Trash2, X, Save } from 'lucide-react';
 import ImageUpload from '@/components/admin/ImageUpload';
 
-const emptyMember = { slug: '', name: '', role: '', specialization: '', image: '' };
+const emptyMember = { slug: '', name: '', role: '', specialization: '', image: '', instagram: '', facebook: '', linkedin: '', tiktok: '' };
 
 const AdminTeam = () => {
   const [items, setItems] = useState([]);
@@ -87,6 +87,22 @@ const AdminTeam = () => {
                 </div>
               ))}
               <ImageUpload label="სურათი" value={editing.image || ''} onChange={url => setEditing({ ...editing, image: url })} />
+              <div className="border-t border-gray-800 pt-4 mt-2">
+                <p className="text-sm text-gray-400 mb-3">სოციალური ქსელები</p>
+                <div className="space-y-3">
+                  {[
+                    { key: 'instagram', label: 'Instagram', placeholder: 'https://instagram.com/...' },
+                    { key: 'facebook', label: 'Facebook', placeholder: 'https://facebook.com/...' },
+                    { key: 'linkedin', label: 'LinkedIn', placeholder: 'https://linkedin.com/in/...' },
+                    { key: 'tiktok', label: 'TikTok', placeholder: 'https://tiktok.com/@...' },
+                  ].map(f => (
+                    <div key={f.key}>
+                      <label className="text-xs text-gray-500 mb-1 block">{f.label}</label>
+                      <input value={editing[f.key] || ''} onChange={e => setEditing({ ...editing, [f.key]: e.target.value })} placeholder={f.placeholder} className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-white text-sm focus:border-purple-500 outline-none" />
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
             <div className="px-6 py-4 border-t border-gray-800 flex justify-end gap-3">
               <button onClick={() => setEditing(null)} className="px-4 py-2.5 text-gray-400 hover:text-white">გაუქმება</button>

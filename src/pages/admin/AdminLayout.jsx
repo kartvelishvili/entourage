@@ -4,8 +4,9 @@ import { useAuth } from '@/contexts/AuthContext';
 import {
   LayoutDashboard, Settings, Image, Layers, Users, HelpCircle,
   Camera, Play, Tag, GraduationCap, CalendarCheck, MessageSquare,
-  Shield, LogOut, Menu, X, ChevronRight, List
+  Shield, LogOut, Menu, X, ChevronRight, List, RefreshCw
 } from 'lucide-react';
+import api from '@/lib/api';
 
 const navItems = [
   { to: '/panali', icon: LayoutDashboard, label: 'დეშბორდი', end: true },
@@ -89,7 +90,18 @@ const AdminLayout = () => {
           <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-gray-400 hover:text-white">
             <Menu size={24} />
           </button>
-          <a href="/" target="_blank" rel="noopener noreferrer" className="ml-auto text-sm text-gray-500 hover:text-purple-400 transition-colors flex items-center gap-1">
+          <button
+            onClick={async () => {
+              try {
+                await api('/api/admin/clear-cache', { method: 'POST' });
+                window.location.reload();
+              } catch (e) { alert('შეცდომა'); }
+            }}
+            className="ml-auto text-sm text-gray-500 hover:text-purple-400 transition-colors flex items-center gap-1"
+          >
+            <RefreshCw size={14} /> ქეშის გაწმენდა
+          </button>
+          <a href="/" target="_blank" rel="noopener noreferrer" className="text-sm text-gray-500 hover:text-purple-400 transition-colors flex items-center gap-1">
             საიტის ნახვა <ChevronRight size={14} />
           </a>
         </header>

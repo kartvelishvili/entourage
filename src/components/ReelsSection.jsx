@@ -2,6 +2,20 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useContent } from '@/contexts/ContentContext';
 
+// Sanitize embed: only allow <iframe> with safe attributes
+const sanitizeEmbed = (html) => {
+  if (!html) return '';
+  const match = html.match(/<iframe[^>]*src=["']([^"']+)["'][^>]*><\/iframe>/i);
+  if (!match) {
+    // Maybe it's just a src URL
+    if (html.startsWith('http')) {
+      return `<iframe src="${html}" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowFullScreen="true"></iframe>`;
+    }
+    return '';
+  }
+  return match[0];
+};
+
 const ReelsSection = () => {
   const { reels: ctxReels, s } = useContent();
 
@@ -31,18 +45,10 @@ const ReelsSection = () => {
               transition={{ delay: index * 0.1 }}
               className="rounded-3xl overflow-hidden shadow-xl bg-card border border-border"
             >
-              <div className="aspect-[9/16] bg-black">
-                <iframe
-                  src={reel.video_url}
-                  className="w-full h-full"
-                  style={{ border: 'none', overflow: 'hidden' }}
-                  scrolling="no"
-                  frameBorder="0"
-                  allowFullScreen
-                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                  title={reel.title || 'Video'}
-                />
-              </div>
+              <div
+                className="aspect-[9/16] bg-black [&_iframe]:!w-full [&_iframe]:!h-full [&_iframe]:!border-none"
+                dangerouslySetInnerHTML={{ __html: sanitizeEmbed(reel.video_url) }}
+              />
               {(reel.title || reel.description) && (
                 <div className="p-4">
                   {reel.title && <h3 className="text-foreground font-bold text-sm">{reel.title}</h3>}

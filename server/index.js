@@ -251,12 +251,12 @@ app.get('/api/content/procedures/:slug', async (req, res) => {
 
 app.post('/api/admin/procedures', authMiddleware, async (req, res) => {
   try {
-    const { slug, category, name, description, image, is_popular, popular_name, popular_description, popular_image, detail_description, benefits, steps, video_url } = req.body;
+    const { slug, category, name, description, image, is_popular, popular_name, popular_description, popular_image, detail_description, benefits, steps, video_url, duration, price_from } = req.body;
     const maxOrder = await pool.query('SELECT COALESCE(MAX(sort_order), -1) + 1 as next FROM procedures');
     const result = await pool.query(
-      `INSERT INTO procedures (slug, category, name, description, image, sort_order, is_popular, popular_name, popular_description, popular_image, detail_description, benefits, steps, video_url)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14) RETURNING *`,
-      [slug, category, name, description, image, maxOrder.rows[0].next, is_popular || false, popular_name || '', popular_description || '', popular_image || '', detail_description || '', JSON.stringify(benefits || []), JSON.stringify(steps || []), video_url || '']
+      `INSERT INTO procedures (slug, category, name, description, image, sort_order, is_popular, popular_name, popular_description, popular_image, detail_description, benefits, steps, video_url, duration, price_from)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16) RETURNING *`,
+      [slug, category, name, description, image, maxOrder.rows[0].next, is_popular || false, popular_name || '', popular_description || '', popular_image || '', detail_description || '', JSON.stringify(benefits || []), JSON.stringify(steps || []), video_url || '', duration || '', price_from || '']
     );
     res.json(result.rows[0]);
   } catch (err) {
@@ -266,10 +266,10 @@ app.post('/api/admin/procedures', authMiddleware, async (req, res) => {
 });
 
 app.put('/api/admin/procedures/:id', authMiddleware, async (req, res) => {
-  const { slug, category, name, description, image, sort_order, is_popular, popular_name, popular_description, popular_image, detail_description, benefits, steps, video_url } = req.body;
+  const { slug, category, name, description, image, sort_order, is_popular, popular_name, popular_description, popular_image, detail_description, benefits, steps, video_url, duration, price_from } = req.body;
   const result = await pool.query(
-    `UPDATE procedures SET slug=$1, category=$2, name=$3, description=$4, image=$5, sort_order=COALESCE($6, sort_order), is_popular=$7, popular_name=$8, popular_description=$9, popular_image=$10, detail_description=$11, benefits=$12, steps=$13, video_url=$14 WHERE id=$15 RETURNING *`,
-    [slug, category, name, description, image, sort_order, is_popular || false, popular_name || '', popular_description || '', popular_image || '', detail_description || '', JSON.stringify(benefits || []), JSON.stringify(steps || []), video_url || '', req.params.id]
+    `UPDATE procedures SET slug=$1, category=$2, name=$3, description=$4, image=$5, sort_order=COALESCE($6, sort_order), is_popular=$7, popular_name=$8, popular_description=$9, popular_image=$10, detail_description=$11, benefits=$12, steps=$13, video_url=$14, duration=$15, price_from=$16 WHERE id=$17 RETURNING *`,
+    [slug, category, name, description, image, sort_order, is_popular || false, popular_name || '', popular_description || '', popular_image || '', detail_description || '', JSON.stringify(benefits || []), JSON.stringify(steps || []), video_url || '', duration || '', price_from || '', req.params.id]
   );
   res.json(result.rows[0]);
 });

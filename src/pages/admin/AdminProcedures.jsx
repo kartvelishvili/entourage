@@ -3,7 +3,7 @@ import api from '@/lib/api';
 import { Plus, Pencil, Trash2, X, Save } from 'lucide-react';
 import ImageUpload from '@/components/admin/ImageUpload';
 
-const emptyProc = { slug: '', category: 'injection', name: '', description: '', image: '', is_popular: false, popular_name: '', popular_description: '', popular_image: '', detail_description: '', benefits: [], steps: [], video_url: '' };
+const emptyProc = { slug: '', category: 'injection', name: '', description: '', image: '', is_popular: false, popular_name: '', popular_description: '', popular_image: '', detail_description: '', benefits: [], steps: [], video_url: '', duration: '', price_from: '' };
 
 const AdminProcedures = () => {
   const [items, setItems] = useState([]);
@@ -111,8 +111,9 @@ const AdminProcedures = () => {
                   <label className="text-sm text-gray-400 mb-1 block">კატეგორია *</label>
                   <select value={editing.category} onChange={e => setEditing({ ...editing, category: e.target.value })} className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-white text-sm focus:border-purple-500 outline-none">
                     <option value="injection">ინექციური</option>
+                    <option value="care">კანის მოვლა</option>
+                    <option value="modeling">მოდელირება</option>
                     <option value="laser">ლაზერული</option>
-                    <option value="care">მოვლა</option>
                   </select>
                 </div>
               </div>
@@ -125,6 +126,17 @@ const AdminProcedures = () => {
               <div>
                 <label className="text-sm text-gray-400 mb-1 block">აღწერა</label>
                 <textarea value={editing.description} onChange={e => setEditing({ ...editing, description: e.target.value })} rows={2} className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-white text-sm focus:border-purple-500 outline-none resize-none" />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm text-gray-400 mb-1 block">ხანგრძლივობა</label>
+                  <input value={editing.duration || ''} onChange={e => setEditing({ ...editing, duration: e.target.value })} placeholder="მაგ: 30-60 წუთი" className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-white text-sm focus:border-purple-500 outline-none" />
+                </div>
+                <div>
+                  <label className="text-sm text-gray-400 mb-1 block">ფასი (დან)</label>
+                  <input value={editing.price_from || ''} onChange={e => setEditing({ ...editing, price_from: e.target.value })} placeholder="მაგ: 150₾" className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-white text-sm focus:border-purple-500 outline-none" />
+                </div>
               </div>
 
               <ImageUpload label="სურათი" value={editing.image} onChange={url => setEditing({ ...editing, image: url })} />

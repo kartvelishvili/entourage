@@ -29,7 +29,7 @@ const Footer = () => {
             )}
             </Link>
             <p className="text-muted-foreground mb-6">
-              {s('site.tagline', 'პრემიუმ ესთეტიკური ცენტრი, სადაც სილამაზე ხვდება პროფესიონალიზმს.')}
+              {s('footer.tagline', s('site.tagline', 'პრემიუმ ესთეტიკური ცენტრი, სადაც სილამაზე ხვდება პროფესიონალიზმს.'))}
             </p>
             <div className="flex gap-4">
               {s('footer.facebook_url') && (
@@ -106,7 +106,7 @@ const Footer = () => {
 
         <div className="border-t border-border pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-muted-foreground">
-            © {new Date().getFullYear()} Entourage Aesthetic Center. ყველა უფლება დაცულია.
+            {s('footer.copyright', `© ${new Date().getFullYear()} Entourage Aesthetic Center. ყველა უფლება დაცულია.`)}
           </p>
           {s('footer.creator_logo') && (
             <a

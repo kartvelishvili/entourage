@@ -116,7 +116,9 @@ const BookingPage = () => {
   return (
     <>
       <Helmet>
-        <title>დაჯავშნა - Entourage</title>
+        <title>{s('seo.booking.title', 'დაჯავშნა - Entourage')}</title>
+        {s('seo.booking.description') && <meta name="description" content={s('seo.booking.description')} />}
+        {s('seo.booking.keywords') && <meta name="keywords" content={s('seo.booking.keywords')} />}
       </Helmet>
 
       <div className="min-h-screen bg-background pb-24">

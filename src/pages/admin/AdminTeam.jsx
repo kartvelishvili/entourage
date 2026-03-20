@@ -68,13 +68,13 @@ const AdminTeam = () => {
       </div>
 
       {editing && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
-          <div className="bg-gray-900 border border-gray-800 rounded-2xl w-full max-w-lg shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4 overflow-y-auto py-8">
+          <div className="bg-gray-900 border border-gray-800 rounded-2xl w-full max-w-lg shadow-2xl max-h-[90vh] flex flex-col">
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800">
               <h2 className="text-lg font-bold text-white">{editing.id ? 'რედაქტირება' : 'ახალი წევრი'}</h2>
               <button onClick={() => setEditing(null)} className="text-gray-500 hover:text-white"><X size={20} /></button>
             </div>
-            <div className="p-6 space-y-4">
+            <div className="p-6 space-y-4 overflow-y-auto flex-1">
               {[
                 { key: 'slug', label: 'Slug' },
                 { key: 'name', label: 'სახელი' },

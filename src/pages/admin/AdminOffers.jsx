@@ -74,8 +74,8 @@ const AdminOffers = () => {
                 <p className="text-gray-500 text-xs mt-0.5">{offer.subtitle}</p>
                 {(offer.old_price || offer.new_price) && (
                   <p className="text-sm mt-1">
-                    {offer.old_price && <span className="text-gray-500 line-through mr-2">{offer.old_price}₾</span>}
-                    {offer.new_price && <span className="text-purple-400 font-bold">{offer.new_price}₾</span>}
+                    {offer.old_price && <span className="text-gray-500 line-through mr-2">{offer.old_price}</span>}
+                    {offer.new_price && <span className="text-purple-400 font-bold">{offer.new_price}</span>}
                   </p>
                 )}
               </div>

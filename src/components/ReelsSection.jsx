@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useContent } from '@/contexts/ContentContext';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // Sanitize embed: only allow <iframe> with safe attributes
 const sanitizeEmbed = (html) => {
@@ -18,6 +19,7 @@ const sanitizeEmbed = (html) => {
 
 const ReelsSection = () => {
   const { reels: ctxReels, s } = useContent();
+  const isMobile = useIsMobile();
 
   if (!ctxReels || ctxReels.length === 0) return null;
 
@@ -36,7 +38,7 @@ const ReelsSection = () => {
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          {ctxReels.map((reel, index) => (
+          {(isMobile ? ctxReels.slice(0, 4) : ctxReels).map((reel, index) => (
             <motion.div
               key={reel.id}
               initial={{ opacity: 0, scale: 0.9 }}

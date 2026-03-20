@@ -7,7 +7,7 @@ const settingsGroups = [
   {
     title: 'მცურავი ღილაკი',
     keys: [
-      { key: 'sticky_button.enabled', label: 'ჩართული (true / false)' },
+      { key: 'sticky_button.enabled', label: 'ჩართული', type: 'toggle' },
       { key: 'sticky_button.link', label: 'ლინკი (მაგ: /contact)' },
     ],
   },
@@ -22,8 +22,10 @@ const settingsGroups = [
     ],
   },
   {
-    title: 'ფუტერი — სოციალური ქსელები & შემქმნელი',
+    title: 'ფუტერი',
     keys: [
+      { key: 'footer.tagline', label: 'ტეგლაინი (ლოგოს ქვეშ)', type: 'textarea' },
+      { key: 'footer.copyright', label: 'Copyright ტექსტი' },
       { key: 'footer.facebook_url', label: 'Facebook URL' },
       { key: 'footer.instagram_url', label: 'Instagram URL' },
       { key: 'footer.tiktok_url', label: 'TikTok URL' },
@@ -31,6 +33,62 @@ const settingsGroups = [
       { key: 'footer.creator_url', label: 'შემქმნელის საიტის ლინკი' },
       { key: 'footer.creator_name', label: 'შემქმნელის სახელი' },
       { key: 'footer.creator_logo_height', label: 'ლოგოს სიმაღლე (px)', type: 'number' },
+    ],
+  },
+  {
+    title: 'SEO — მთავარი',
+    keys: [
+      { key: 'seo.home.title', label: 'Meta Title' },
+      { key: 'seo.home.description', label: 'Meta Description', type: 'textarea' },
+      { key: 'seo.home.keywords', label: 'Keywords' },
+    ],
+  },
+  {
+    title: 'SEO — პროცედურები',
+    keys: [
+      { key: 'seo.procedures.title', label: 'Meta Title' },
+      { key: 'seo.procedures.description', label: 'Meta Description', type: 'textarea' },
+      { key: 'seo.procedures.keywords', label: 'Keywords' },
+    ],
+  },
+  {
+    title: 'SEO — შედეგები',
+    keys: [
+      { key: 'seo.results.title', label: 'Meta Title' },
+      { key: 'seo.results.description', label: 'Meta Description', type: 'textarea' },
+      { key: 'seo.results.keywords', label: 'Keywords' },
+    ],
+  },
+  {
+    title: 'SEO — კურსები',
+    keys: [
+      { key: 'seo.courses.title', label: 'Meta Title' },
+      { key: 'seo.courses.description', label: 'Meta Description', type: 'textarea' },
+      { key: 'seo.courses.keywords', label: 'Keywords' },
+    ],
+  },
+  {
+    title: 'SEO — გუნდი',
+    keys: [
+      { key: 'seo.team.title', label: 'Meta Title' },
+      { key: 'seo.team.description', label: 'Meta Description', type: 'textarea' },
+      { key: 'seo.team.keywords', label: 'Keywords' },
+    ],
+  },
+  {
+    title: 'SEO — კონტაქტი',
+    keys: [
+      { key: 'seo.contact.title', label: 'Meta Title' },
+      { key: 'seo.contact.description', label: 'Meta Description', type: 'textarea' },
+      { key: 'seo.contact.keywords', label: 'Keywords' },
+    ],
+  },
+  {
+    title: 'SEO — დაჯავშნა',
+    keys: [
+      { key: 'seo.booking.title', label: 'Meta Title' },
+      { key: 'seo.booking.description', label: 'Meta Description', type: 'textarea' },
+      { key: 'seo.booking.keywords', label: 'Keywords' },
     ],
   },
   {
@@ -184,7 +242,18 @@ const AdminSettings = () => {
               <div key={field.key} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
                 <label className="text-sm text-gray-400 pt-2.5 font-medium">{field.label}<span className="text-gray-600 block text-xs mt-0.5">{field.key}</span></label>
                 <div className="md:col-span-2">
-                  {field.type === 'image' ? (
+                  {field.type === 'toggle' ? (
+                    <button
+                      onClick={() => handleChange(field.key, settings[field.key] === 'true' ? 'false' : 'true')}
+                      className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors ${
+                        settings[field.key] === 'true' || (!settings[field.key] && field.key === 'sticky_button.enabled') ? 'bg-purple-600' : 'bg-gray-700'
+                      }`}
+                    >
+                      <span className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${
+                        settings[field.key] === 'true' || (!settings[field.key] && field.key === 'sticky_button.enabled') ? 'translate-x-8' : 'translate-x-1.5'
+                      }`} />
+                    </button>
+                  ) : field.type === 'image' ? (
                     <ImageUpload
                       value={settings[field.key] || ''}
                       onChange={(url) => handleChange(field.key, url)}

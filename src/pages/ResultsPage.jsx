@@ -6,7 +6,7 @@ import PageHeader from '@/components/PageHeader';
 import { useContent } from '@/contexts/ContentContext';
 
 const ResultsPage = () => {
-  const { results: ctxResults } = useContent();
+  const { results: ctxResults, s } = useContent();
 
   const showcases = ctxResults.length > 0 ? ctxResults.map(r => ({
     title: r.title,
@@ -18,7 +18,9 @@ const ResultsPage = () => {
   return (
     <>
       <Helmet>
-        <title>შედეგები - Entourage</title>
+        <title>{s('seo.results.title', 'შედეგები - Entourage')}</title>
+        {s('seo.results.description') && <meta name="description" content={s('seo.results.description')} />}
+        {s('seo.results.keywords') && <meta name="keywords" content={s('seo.results.keywords')} />}
       </Helmet>
 
       <div className="min-h-screen bg-background pb-24">

@@ -53,7 +53,9 @@ const CoursesPage = () => {
   return (
     <>
       <Helmet>
-        <title>სასწავლო კურსები - Entourage</title>
+        <title>{s('seo.courses.title', 'სასწავლო კურსები - Entourage')}</title>
+        {s('seo.courses.description') && <meta name="description" content={s('seo.courses.description')} />}
+        {s('seo.courses.keywords') && <meta name="keywords" content={s('seo.courses.keywords')} />}
       </Helmet>
 
       <div className="min-h-screen bg-background">

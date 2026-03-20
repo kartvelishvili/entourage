@@ -12,7 +12,7 @@ const TikTokIcon = ({ size = 18 }) => (
 );
 
 const TeamPage = () => {
-  const { team: ctxTeam } = useContent();
+  const { team: ctxTeam, s } = useContent();
 
   const teamMembers = ctxTeam.length > 0 ? ctxTeam.map(m => ({
     id: m.slug,
@@ -29,7 +29,9 @@ const TeamPage = () => {
   return (
     <>
       <Helmet>
-        <title>ჩვენი გუნდი - Entourage</title>
+        <title>{s('seo.team.title', 'ჩვენი გუნდი - Entourage')}</title>
+        {s('seo.team.description') && <meta name="description" content={s('seo.team.description')} />}
+        {s('seo.team.keywords') && <meta name="keywords" content={s('seo.team.keywords')} />}
       </Helmet>
 
       <div className="min-h-screen bg-background pb-24">

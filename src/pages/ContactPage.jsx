@@ -44,7 +44,9 @@ const ContactPage = () => {
   return (
     <>
       <Helmet>
-        <title>კონტაქტი - Entourage</title>
+        <title>{s('seo.contact.title', 'კონტაქტი - Entourage')}</title>
+        {s('seo.contact.description') && <meta name="description" content={s('seo.contact.description')} />}
+        {s('seo.contact.keywords') && <meta name="keywords" content={s('seo.contact.keywords')} />}
       </Helmet>
 
       <div className="min-h-screen bg-background pb-24">

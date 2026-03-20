@@ -20,10 +20,10 @@ const StickyBookingButton = () => {
     >
       <Link
         to={link}
-        className="bg-primary-purple hover:bg-primary-purple/90 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110"
+        className="bg-primary-purple hover:bg-primary-purple/90 text-white w-12 h-12 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110"
         title="დაგვიკავშირდით"
       >
-        <Phone className="w-6 h-6" />
+        <Phone className="w-5 h-5" />
       </Link>
     </motion.div>
   );

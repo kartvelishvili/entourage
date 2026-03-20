@@ -125,6 +125,18 @@ async function migrate() {
     await client.query(`INSERT INTO site_settings (key, value) VALUES ('sticky_button.enabled', 'true') ON CONFLICT (key) DO NOTHING`);
     await client.query(`INSERT INTO site_settings (key, value) VALUES ('sticky_button.link', '/contact') ON CONFLICT (key) DO NOTHING`);
 
+    // Footer settings
+    await client.query(`INSERT INTO site_settings (key, value) VALUES ('footer.tagline', '') ON CONFLICT (key) DO NOTHING`);
+    await client.query(`INSERT INTO site_settings (key, value) VALUES ('footer.copyright', '') ON CONFLICT (key) DO NOTHING`);
+
+    // SEO settings
+    const seoPages = ['home', 'procedures', 'results', 'courses', 'team', 'contact', 'booking'];
+    for (const page of seoPages) {
+      await client.query(`INSERT INTO site_settings (key, value) VALUES ('seo.${page}.title', '') ON CONFLICT (key) DO NOTHING`);
+      await client.query(`INSERT INTO site_settings (key, value) VALUES ('seo.${page}.description', '') ON CONFLICT (key) DO NOTHING`);
+      await client.query(`INSERT INTO site_settings (key, value) VALUES ('seo.${page}.keywords', '') ON CONFLICT (key) DO NOTHING`);
+    }
+
     // ── Offers ──
     await client.query(`
       CREATE TABLE IF NOT EXISTS offers (

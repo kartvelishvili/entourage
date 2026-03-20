@@ -28,7 +28,9 @@ const ProceduresPage = () => {
   return (
     <>
       <Helmet>
-        <title>პროცედურები - Entourage</title>
+        <title>{s('seo.procedures.title', 'პროცედურები - Entourage')}</title>
+        {s('seo.procedures.description') && <meta name="description" content={s('seo.procedures.description')} />}
+        {s('seo.procedures.keywords') && <meta name="keywords" content={s('seo.procedures.keywords')} />}
       </Helmet>
 
       <div className="min-h-screen bg-background">
